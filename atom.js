@@ -16,6 +16,50 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+/* Helper functions */
+function isValidString(val) {
+    return typeof(val) === typeof('') && val !== '';
+}
+
+/* Setting up a minimal inheritance infra */
+Function.prototype.inherits = function (parent) {
+    this.prototype = new parent();
+}
+
+Function.prototype.extend = function (obj) {
+    for (var i in obj)
+        this.prototype[i] = obj[i];
+}
+
+/* Base element for all Atom elements */
+
+function BasicElement () {
+    this.extraElements = [];
+}
+
+BasicElement.prototype = {
+    _getElement: function () {
+        throw new Error('BasicElement._getElement: This method should ' +
+                        'be overrided;')
+    },
+
+    append: function (element) {
+        this.extraElements.push(element);
+    },
+
+    toXML: function () {
+        var element = this._getElement();
+        for (var i = 0; i < this.extraElements.length; i++)
+            element.appendChild(this.extraElements[i]._getElement());
+        return element;
+    },
+
+    toString: function () {
+        return this.toXML().outerHTML;
+    }
+};
+
+
 /* Public objects in the `atom' namespace */
 
 var atom = {
@@ -36,7 +80,7 @@ var atom = {
         this.content = null;
     },
 
-    Person: function (name) {
+    Person: function (name, email, iri) {
         this.name = name;
         this.email = email;
         this.iri = iri;
@@ -44,36 +88,8 @@ var atom = {
 
 };
 
-/* Helper functions */
-function isValidString(val) {
-    return typeof(val) === typeof('') && val !== '';
-}
-
-/* Base element for all Atom elements */
-
-function BasicElement () {
-}
-
-BasicElement.prototype = {
-    _getElement: function () {
-        throw new Error('BasicElement._getElement: This method should ' +
-                        'be overrided;')
-    },
-
-    toXML: function () {
-        var element = this._getElement();
-        return element;
-    },
-
-    toString: function () {
-        return this.toXML().outerHTML;
-    }
-};
-
-atom.SimpleElement.prototype = {
-    /* inheritance */
-    __proto__: BasicElement.prototype,
-
+atom.SimpleElement.inherits(BasicElement);
+atom.SimpleElement.extend({
     /* Element Creation */
     _getElement: function () {
         var element = document.createElement(this.name);
@@ -81,12 +97,10 @@ atom.SimpleElement.prototype = {
         element.appendChild(elementValue);
         return element;
     }
-};
+});
 
-atom.Link.prototype = {
-    /* inheritance */
-    __proto__: BasicElement.prototype,
-
+atom.Link.inherits(BasicElement);
+atom.Link.extend({
     /* getters and setters */
     getHref: function () { return this.href; },
     setHref: function (href) { this.href = href; },
@@ -107,12 +121,10 @@ atom.Link.prototype = {
             element.setAttribute('rel', this.rel);
         return element;
     }
-};
+});
 
-atom.Content.prototype = {
-    /* inheritance */
-    __proto__: BasicElement.prototype,
-
+atom.Content.inherits(BasicElement);
+atom.Content.extend({
     /* getters and setters */
     getType: function () { return this.type; },
     setType: function (type) { this.type = type; },
@@ -144,12 +156,10 @@ atom.Content.prototype = {
         }
         return element;
     }
-};
+});
 
-atom.Person.prototype = {
-    /* inheritance */
-    __proto__: BasicElement.prototype,
-
+atom.Person.inherits(BasicElement);
+atom.Person.extend({
     /* getters and setters */
     getName: function () { return this.name; },
     setName: function (name) { this.name = name; },
@@ -175,4 +185,4 @@ atom.Person.prototype = {
 
         return element;
     }
-};
+});
