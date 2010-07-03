@@ -91,6 +91,18 @@ var atom = {
         this.term = term;
         this.label = label;
         this.scheme = scheme;
+    },
+
+    Entry: function (title) {
+        this.title = title;
+        this.id = null;
+        this.updated = new Date();
+        this.published = null;
+        this.authors = [];
+        this.categories = [];
+        this.links = [];
+        this.summary = null;
+        this.content = null;
     }
 
 };
@@ -222,6 +234,101 @@ atom.Category.extend({
             element.setAttribute('label', this.label);
         if (isValidString(this.scheme))
             element.setAttribute('scheme', this.scheme);
+        return element;
+    }
+});
+
+atom.Entry.inherits(BasicElement);
+atom.Entry.extend({
+    /* getters and setters */
+    getTitle: function () { return this.title; },
+    setTitle: function (title) { this.title = title; },
+    getId: function () { return this.id; },
+    setId: function (id) { this.id = id; },
+    getUpdated: function () { return this.updated; },
+    setUpdated: function (updated) { this.updated = updated; },
+    getPublished: function () { return this.published; },
+    setPublished: function (published) { this.published = published; },
+    getSummary: function () { return this.summary; },
+    setSummary: function (summary) { this.summary = summary; },
+    getContent: function () { return this.content; },
+    setContent: function (content) { this.content = content; },
+
+    /* List getters */
+    getAuthors: function () { return this.authors; },
+    getCategorys: function () { return this.categories; },
+    getLinks: function () { return this.links; },
+
+    /* Methods to control lists of sub-elements */
+    addAuthor: function (author) {
+        if (author instanceof atom.Person)
+            this.authors.push(author);
+        else
+            throw new Error('Waiting for an atom.Person object');
+    },
+
+    addCategory: function (category) {
+        if (category instanceof atom.Category)
+            this.categorys.push(category);
+        else
+            throw new Error('Waiting for an atom.Category object');
+    },
+
+    addLink: function (link) {
+        if (link instanceof atom.Link)
+            this.links.push(link);
+        else
+            throw new Error('Waiting for an atom.Link object');
+    },
+
+    /* Element Creation */
+    _getElement: function () {
+        var element = document.createElement('entry');
+        var i = 0;
+
+        if (isValidString(this.title)) {
+            var title = document.createElement('title')
+            title.appendChild(document.createTextNode(this.title));
+            element.appendChild(title);
+        }
+
+        if (isValidString(this.id)) {
+            var id = document.createElement('id')
+            id.appendChild(document.createTextNode(this.id));
+            element.appendChild(id);
+        }
+
+        if (this.updated instanceof Date) {
+            var date = this.updated.toISOString();
+            var updated = document.createElement('updated')
+            updated.appendChild(document.createTextNode(date));
+            element.appendChild(updated);
+        }
+
+        if (this.published instanceof Date) {
+            var date = this.published.toISOString();
+            var published = document.createElement('published')
+            published.appendChild(document.createTextNode(date));
+            element.appendChild(published);
+        }
+
+        if (isValidString(this.summary)) {
+            var summary = document.createElement('summary')
+            summary.appendChild(document.createTextNode(this.summary));
+            element.appendChild(summary);
+        }
+
+        /* Adding lists */
+        for (i = 0; i < this.authors.length; i++)
+            element.appendChild(this.authors[i]._getElement());
+        for (i = 0; i < this.categories.length; i++)
+            element.appendChild(this.categories[i]._getElement());
+        for (i = 0; i < this.links.length; i++)
+            element.appendChild(this.links[i]._getElement());
+
+        /* Finally adding the content */
+        element.appendChild(this.content._getElement());
+
         return element;
     }
 });
