@@ -93,7 +93,7 @@ function () {
     equals(person.toString(), '<author><name>Lincoln</name>' +
            '<email>lincoln@comum.org</email></author>');
 
-    person.setIri('http://comum.org');
+    person.setUri('http://comum.org');
     equals(person.toString(), '<author><name>Lincoln</name>' +
            '<email>lincoln@comum.org</email>' +
            '<uri>http://comum.org</uri>' +

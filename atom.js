@@ -88,11 +88,11 @@ var atom = {
         this.content = null;
     },
 
-    Person: function (name, email, iri) {
+    Person: function (name, email, uri) {
         this.tagName = 'author';
         this.name = name;
         this.email = email;
-        this.iri = iri;
+        this.uri = uri;
     },
 
     Category: function (term, label, scheme) {
@@ -194,8 +194,8 @@ atom.Person.extend({
     setName: function (name) { this.name = name; },
     getEmail: function () { return this.email; },
     setEmail: function (email) { this.email = email; },
-    getIri: function () { return this.iri; },
-    setIri: function (iri) { this.iri = iri; },
+    getUri: function () { return this.uri; },
+    setUri: function (uri) { this.uri = uri; },
 
     /* Element Creation */
     _getElement: function () {
@@ -214,10 +214,10 @@ atom.Person.extend({
             element.appendChild(email);
         }
 
-        if (isValidString(this.iri)) {
-            var iri = document.createElement('uri')
-            iri.appendChild(document.createTextNode(this.iri));
-            element.appendChild(iri);
+        if (isValidString(this.uri)) {
+            var uri = document.createElement('uri')
+            uri.appendChild(document.createTextNode(this.uri));
+            element.appendChild(uri);
         }
 
         return element;
