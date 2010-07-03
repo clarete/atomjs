@@ -60,3 +60,42 @@ test('Link objects can have href, title and rel attrs', function () {
     equal(link.toString(), '<link href="http://gnome.org" ' +
           'title="Link Title" rel="alternate">');
 });
+
+test('Content objects should have a type attr defined', function () {
+    var ct = new atom.Content();
+    try {
+        ct.toString();
+        ok(false, 'Not reached');
+    } catch (e) {
+        ok(true, 'type param is required');
+    }
+});
+
+test('Content objects should not fill both src and content attrs', function () {
+    var ct = new atom.Content('text/plain');
+    ct.setSrc('http://gnu.org');
+    ct.setContent('Blah');
+
+    try {
+        ct.toString();
+        ok(false, 'Not reached');
+    } catch (e) {
+        ok(true, 'both src and content attrs cannot be filled');
+    }
+});
+
+test('It should be possible to describe a person with name, email and an uri',
+function () {
+    var person = new atom.Person('Lincoln');
+    equals(person.toString(), '<author><name>Lincoln</name></author>');
+
+    person.setEmail('lincoln@comum.org');
+    equals(person.toString(), '<author><name>Lincoln</name>' +
+           '<email>lincoln@comum.org</email></author>');
+
+    person.setIri('http://comum.org');
+    equals(person.toString(), '<author><name>Lincoln</name>' +
+           '<email>lincoln@comum.org</email>' +
+           '<uri>http://comum.org</uri>' +
+           '</author>');
+});
