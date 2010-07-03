@@ -367,39 +367,50 @@ function doParseEntry (xml) {
     /* The entry object itself! */
     entry = new atom.Entry();
 
-    /* Getting id attribute */
-    var id = doc.querySelector('id');
-    if (id && id.firstChild)
-        entry.setId(id.firstChild.nodeValue);
+    var childs = doc.getElementsByTagName('*');
+    for (i = 0; i < childs.length; i++) {
+        var child = childs[i];
+        if (!child.firstChild)
+            continue;
 
-    /* Getting the title attribute */
-    var title = doc.querySelector('title');
-    if (title && title.firstChild)
-        entry.setTitle(title.firstChild.nodeValue);
+        switch (child.tagName) {
+        case 'id':
+            entry.setId(child.firstChild.nodeValue);
+            break;
 
-    /* Getting the updated field */
-    var updated = doc.querySelector('updated');
-    if (updated && updated.firstChild)
-        entry.setUpdated(parseIsoDate(updated.firstChild.nodeValue));
+        case 'title':
+            entry.setTitle(child.firstChild.nodeValue);
+            break;
 
-    /* Looking for the authors */
-    var authors = doc.getElementsByTagName('author');
-    for (i = 0; i < authors.length; i++) {
-        var author = new atom.Person();
+        case 'updated':
+            entry.setUpdated(parseIsoDate(child.firstChild.nodeValue));
+            break;
 
-        var name = authors[i].querySelector('name');
-        if (name && name.firstChild)
-            author.setName(name.firstChild.nodeValue);
+        case 'published':
+            entry.setPublished(parseIsoDate(child.firstChild.nodeValue));
+            break;
 
-        var email = authors[i].querySelector('email');
-        if (email && email.firstChild)
-            author.setEmail(email.firstChild.nodeValue);
+        case 'summary':
+            entry.setSummary(child.firstChild.nodeValue);
+            break;
 
-        var uri = authors[i].querySelector('uri');
-        if (uri && uri.firstChild)
-            author.setUri(uri.firstChild.nodeValue);
+        case 'author':
+            var author = new atom.Person();
+            var name = child.querySelector('name');
+            if (name && name.firstChild)
+                author.setName(name.firstChild.nodeValue);
 
-        entry.addAuthor(author);
+            var email = child.querySelector('email');
+            if (email && email.firstChild)
+                author.setEmail(email.firstChild.nodeValue);
+
+            var uri = child.querySelector('uri');
+            if (uri && uri.firstChild)
+                author.setUri(uri.firstChild.nodeValue);
+
+            entry.addAuthor(author);
+            break;
+        }
     }
 
     return entry;

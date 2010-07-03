@@ -122,14 +122,16 @@ test('It should be possible to describe categories with term, label and ' +
            'scheme="http://guake.org"></category>');
 });
 
-test('It should be possible to load an arbitrary xml entry to our ' +
-'objects structure', function () {
-    var entry;
+test('It should be possible to load an atom entry to our objects ' +
+'structure', function () {
+    var entry, author;
     var xml = '<entry xmlns="http://www.w3.org/2005/Atom">' +
         '<link href="http://cascardo.info/atom/1.atom" rel="self"/>' +
         '<id>http://cascardo.info/atom/1.atom</id>' +
         '<title>Real Soon Now</title>' +
         '<updated>2009-01-06T20:57:53Z</updated>' +
+        '<published>2009-01-06T21:00:50Z</published>' +
+        '<summary>Loren ipsum</summary>' +
         '<author><name>Thadeu Lima de Souza Cascardo</name></author>' +
         '<content type="xhtml">' +
         ' <div xmlns="http://www.w3.org/1999/xhtml">' +
@@ -159,5 +161,12 @@ test('It should be possible to load an arbitrary xml entry to our ' +
     ok(entry.getUpdated() instanceof Date, 'updated attr is a Date instance');
     equals(entry.getUpdated().toString(),
            (new Date(2009, 0, 6, 20, 57, 53)).toString(), 'Updated date');
+    equals(entry.getPublished().toString(),
+           (new Date(2009, 0, 6, 21, 00, 50)).toString(), 'Published date');
+    equals(entry.getSummary(), 'Loren ipsum', 'Entry summary');
     equals(entry.getAuthors().length, 1, 'Number of authors');
+
+    author = entry.getAuthors()[0];
+    equal(author.getName(), 'Thadeu Lima de Souza Cascardo', 'Author`s name');
+    equal(author.getEmail(), null, 'Author`s email addr');
 });
