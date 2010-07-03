@@ -12,9 +12,9 @@ test('B prototype should inherit all A attributes', function () {
     function B () { }
 
     B.inherits(A);
-    ok((new B()).color === 'red');
-    ok((new B()).count === 10);
-    ok((new B()).game === 'Super Mario');
+    equals((new B()).color, 'red');
+    equals((new B()).count, 10);
+    equals((new B()).game, 'Super Mario');
 });
 
 test('B prototype should inherit all A methods', function () {
