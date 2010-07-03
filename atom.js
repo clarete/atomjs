@@ -195,7 +195,7 @@ atom.Person.extend({
         }
 
         if (isValidString(this.iri)) {
-            var iri = document.creannteElement('iri')
+            var iri = document.createElement('iri')
             iri.appendChild(document.createTextNode(this.iri));
             element.appendChild(iri);
         }
