@@ -237,6 +237,8 @@ atom.Category.extend({
     /* Element Creation */
     _getElement: function () {
         var element = document.createElement('category');
+        if (!isValidString(this.term))
+            throw new Error("Category._getElement: `term' attr not set");
         element.setAttribute('term', this.term);
         if (isValidString(this.label))
             element.setAttribute('label', this.label);

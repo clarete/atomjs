@@ -99,3 +99,15 @@ function () {
            '<uri>http://comum.org</uri>' +
            '</author>');
 });
+
+test('It should be possible to describe categories with term, label and ' +
+'schme attrs', function () {
+    var cat = new atom.Category();
+    try {
+        cat.toString();
+        ok(false, 'Not reached');
+    } catch (e) {
+        ok(true, "The `term' attribute is required");
+    }
+
+});
