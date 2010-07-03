@@ -110,4 +110,14 @@ test('It should be possible to describe categories with term, label and ' +
         ok(true, "The `term' attribute is required");
     }
 
+    cat.setTerm('myterm');
+    equals(cat.toString(), '<category term="myterm"></category>');
+
+    cat.setLabel('My Label');
+    equals(cat.toString(), '<category term="myterm" label="My Label">' +
+           '</category>');
+
+    cat.setScheme('http://guake.org');
+    equals(cat.toString(), '<category term="myterm" label="My Label" ' +
+           'scheme="http://guake.org"></category>');
 });
