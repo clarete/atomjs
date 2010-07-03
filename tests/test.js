@@ -159,10 +159,8 @@ test('It should be possible to load an atom entry to our objects ' +
     equals(entry.getId(), 'http://cascardo.info/atom/1.atom', 'Entry id');
     equals(entry.getTitle(), 'Real Soon Now', 'Entry title');
     ok(entry.getUpdated() instanceof Date, 'updated attr is a Date instance');
-    equals(entry.getUpdated().toString(),
-           (new Date(2009, 0, 6, 20, 57, 53)).toString(), 'Updated date');
-    equals(entry.getPublished().toString(),
-           (new Date(2009, 0, 6, 21, 00, 50)).toString(), 'Published date');
+    same(entry.getUpdated(), new Date(2009, 0, 6, 20, 57, 53), 'Updated date');
+    same(entry.getPublished(), new Date(2009, 0, 6, 21, 00, 50), 'Published date');
     equals(entry.getSummary(), 'Loren ipsum', 'Entry summary');
     equals(entry.getAuthors().length, 1, 'Number of authors');
 
