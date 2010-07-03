@@ -171,13 +171,21 @@ atom.Person.extend({
     /* Element Creation */
     _getElement: function () {
         var element = document.createElement('person');
-        if (this.email) {
+        if (!isValidString(this.name)) {
+            throw new Error("Person._getElement: `name' attr is not set");
+        } else {
+            var name = document.createElement('name')
+            name.appendChild(document.createTextNode(this.name));
+            element.appendChild(name);
+        }
+
+        if (isValidString(this.email)) {
             var email = document.createElement('email')
             email.appendChild(document.createTextNode(this.email));
             element.appendChild(email);
         }
 
-        if (this.iri) {
+        if (isValidString(this.iri)) {
             var iri = document.creannteElement('iri')
             iri.appendChild(document.createTextNode(this.iri));
             element.appendChild(iri);
