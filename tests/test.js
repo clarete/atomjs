@@ -121,3 +121,43 @@ test('It should be possible to describe categories with term, label and ' +
     equals(cat.toString(), '<category term="myterm" label="My Label" ' +
            'scheme="http://guake.org"></category>');
 });
+
+test('It should be possible to load an arbitrary xml entry to our ' +
+'objects structure', function () {
+    var entry;
+    var xml = '<entry xmlns="http://www.w3.org/2005/Atom">' +
+        '<link href="http://cascardo.info/atom/1.atom" rel="self"/>' +
+        '<id>http://cascardo.info/atom/1.atom</id>' +
+        '<title>Real Soon Now</title>' +
+        '<updated>2009-01-06T20:57:53Z</updated>' +
+        '<author><name>Thadeu Lima de Souza Cascardo</name></author>' +
+        '<content type="xhtml">' +
+        ' <div xmlns="http://www.w3.org/1999/xhtml">' +
+        '  <h1>Something should be up here real soon now!</h1>' +
+        ' </div>' +
+        '</content>' +
+        '</entry>';
+
+    try {
+        entry = atom.parseEntry('test');
+        ok(false, 'Not reached');
+    } catch (e) {
+        ok(true, 'invalid xml is not accepted when loading an entry');
+    }
+
+    try {
+        entry = atom.parseEntry('<root><title>test</title></root>');
+        ok(false, 'Not reached');
+    } catch (e) {
+        ok(true, 'The <entry/> element should be the root of an xml parsed');
+    }
+
+    entry = atom.parseEntry(xml);
+    ok(entry instanceof atom.Entry, "returned element is an entry");
+    equals(entry.getId(), 'http://cascardo.info/atom/1.atom', 'Entry id');
+    equals(entry.getTitle(), 'Real Soon Now', 'Entry title');
+    ok(entry.getUpdated() instanceof Date, 'updated attr is a Date instance');
+    equals(entry.getUpdated().toString(),
+           (new Date(2009, 0, 6, 20, 57, 53)).toString(), 'Updated date');
+    equals(entry.getAuthors().length, 1, 'Number of authors');
+});

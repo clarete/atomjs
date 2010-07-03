@@ -111,7 +111,9 @@ var atom = {
         this.links = [];
         this.summary = null;
         this.content = null;
-    }
+    },
+
+    parseEntry: doParseEntry
 
 };
 
@@ -342,3 +344,59 @@ atom.Entry.extend({
         return element;
     }
 });
+
+function parseIsoDate (dateStr) {
+    return new Date(('' + dateStr).replace(/[TZ]/g, " "));
+}
+
+function doParseEntry (xml) {
+    var parser = new DOMParser();
+    var doc = parser.parseFromString(xml, "text/xml");
+    var entry, i;
+
+    /* Some sanity checks */
+    if (!doc)
+        throw new Error('Unable to parse document');
+    if (doc.documentElement.tagName !== 'entry')
+        throw new Error('Main element of xml is not an entry');
+
+    /* The entry object itself! */
+    entry = new atom.Entry();
+
+    /* Getting id attribute */
+    var id = doc.querySelector('id');
+    if (id && id.firstChild)
+        entry.setId(id.firstChild.nodeValue);
+
+    /* Getting the title attribute */
+    var title = doc.querySelector('title');
+    if (title && title.firstChild)
+        entry.setTitle(title.firstChild.nodeValue);
+
+    /* Getting the updated field */
+    var updated = doc.querySelector('updated');
+    if (updated && updated.firstChild)
+        entry.setUpdated(parseIsoDate(updated.firstChild.nodeValue));
+
+    /* Looking for the authors */
+    var authors = doc.getElementsByTagName('author');
+    for (i = 0; i < authors.length; i++) {
+        var author = new atom.Person();
+
+        var name = authors[i].querySelector('name');
+        if (name && name.firstChild)
+            author.setName(name.firstChild.nodeValue);
+
+        var email = authors[i].querySelector('email');
+        if (email && email.firstChild)
+            author.setEmail(email.firstChild.nodeValue);
+
+        var uri = authors[i].querySelector('uri');
+        if (uri && uri.firstChild)
+            author.setUri(uri.firstChild.nodeValue);
+
+        entry.addAuthor(author);
+    }
+
+    return entry;
+}
