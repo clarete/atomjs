@@ -345,8 +345,12 @@ atom.Entry.extend({
     }
 });
 
-function parseIsoDate (dateStr) {
-    return new Date(('' + dateStr).replace(/[TZ]/g, " "));
+function parseIsoDate (date) {
+    var cleaned = date
+        .replace(/-/g, '\/')
+        .replace(/[TZ]/g, ' ')
+        .replace(/\s+$/, '');
+    return new Date(cleaned);
 }
 
 function doParseEntry (xml) {
