@@ -81,6 +81,7 @@ var atom = {
     },
 
     Person: function (name, email, iri) {
+        this.tagName = 'author';
         this.name = name;
         this.email = email;
         this.iri = iri;
@@ -161,6 +162,8 @@ atom.Content.extend({
 atom.Person.inherits(BasicElement);
 atom.Person.extend({
     /* getters and setters */
+    getTagName: function () { return this.tagName; },
+    setTagName: function (tagName) { this.tagName = tagName; },
     getName: function () { return this.name; },
     setName: function (name) { this.name = name; },
     getEmail: function () { return this.email; },
@@ -170,7 +173,7 @@ atom.Person.extend({
 
     /* Element Creation */
     _getElement: function () {
-        var element = document.createElement('person');
+        var element = document.createElement(this.tagName);
         if (!isValidString(this.name)) {
             throw new Error("Person._getElement: `name' attr is not set");
         } else {
