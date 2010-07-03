@@ -55,7 +55,15 @@ BasicElement.prototype = {
     },
 
     toString: function () {
-        return this.toXML().outerHTML;
+        var node = this.toXML();
+
+        /* Not using XMLSerializer because Firefox uppercases all node
+         * names and it breaks our tests. I used to complain about IE,
+         * not about FF :(
+         */
+        var container = document.createElement('container');
+        container.appendChild(node.cloneNode(true));
+        return container.innerHTML;
     }
 };
 
