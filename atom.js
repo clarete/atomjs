@@ -85,6 +85,12 @@ var atom = {
         this.name = name;
         this.email = email;
         this.iri = iri;
+    },
+
+    Category: function (term, label, scheme) {
+        this.term = term;
+        this.label = label;
+        this.scheme = scheme;
     }
 
 };
@@ -194,6 +200,28 @@ atom.Person.extend({
             element.appendChild(iri);
         }
 
+        return element;
+    }
+});
+
+atom.Category.inherits(BasicElement);
+atom.Category.extend({
+    /* getters and setters */
+    getTerm: function () { return this.term; },
+    setTerm: function (term) { this.term = term; },
+    getLabel: function () { return this.label; },
+    setLabel: function (label) { this.label = label; },
+    getScheme: function () { return this.scheme; },
+    setScheme: function (scheme) { this.scheme = scheme; },
+
+    /* Element Creation */
+    _getElement: function () {
+        var element = document.createElement('category');
+        element.setAttribute('term', this.term);
+        if (isValidString(this.label))
+            element.setAttribute('label', this.label);
+        if (isValidString(this.scheme))
+            element.setAttribute('scheme', this.scheme);
         return element;
     }
 });
