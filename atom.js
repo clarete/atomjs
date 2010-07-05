@@ -171,11 +171,11 @@ atom.Content.extend({
         element.setAttribute('type', this.type);
 
         if (isValidString(this.src) && isValidString(this.content))
-            throw new Error("Content._getElement: `content' and `src' should " +
-                            "not be set");
+            throw new Error("Content._getElement: `content' and `src' " +
+                            "should not be set");
         else if (!isValidString(this.src) && !isValidString(this.content))
-            throw new Error("Content._getElement: `content' OR `src' should" +
-                            "be set");
+            throw new Error("Content._getElement: `content' OR `src' " +
+                            "should be set");
 
         if (isValidString(this.src))
             element.setAttribute('src', this.src);
