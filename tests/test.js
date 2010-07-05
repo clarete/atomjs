@@ -176,4 +176,11 @@ test('It should be possible to load an atom entry to our objects ' +
     equals(categories[0].getTerm(), 'oi', 'Term of the first category');
     equals(categories[1].getLabel(), 'Blah', 'Label of the second cat');
     equals(categories[2].getScheme(), 'http://gnu.org', '3rd cat scheme');
+
+    var links = entry.getLinks();
+    equals(links.length, 1, 'Number of links');
+    equals(links[0].getHref(), 'http://cascardo.info/atom/1.atom',
+           'Link href attribute');
+    equals(links[0].getRel(), 'self', 'Link rel attribute');
+    equals(links[0].getTitle(), null, 'No title in this link');
 });

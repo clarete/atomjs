@@ -415,6 +415,14 @@ function doParseEntry (xml) {
             category.setScheme(child.getAttribute('scheme'));
             entry.addCategory(category);
             break;
+
+        case 'link':
+            var link = new atom.Link();
+            link.setHref(child.getAttribute('href'));
+            link.setTitle(child.getAttribute('title'));
+            link.setRel(child.getAttribute('rel'))
+            entry.addLink(link);
+            break;
         }
     }
 
