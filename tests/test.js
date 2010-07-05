@@ -129,6 +129,9 @@ test('It should be possible to load an atom entry to our objects ' +
         '<link href="http://cascardo.info/atom/1.atom" rel="self"/>' +
         '<id>http://cascardo.info/atom/1.atom</id>' +
         '<title>Real Soon Now</title>' +
+        '<category term="oi" />' +
+        '<category term="blah" label="Blah" />' +
+        '<category term="test" label="Test" scheme="http://gnu.org" />' +
         '<updated>2009-01-06T20:57:53Z</updated>' +
         '<published>2009-01-06T21:00:50Z</published>' +
         '<summary>Loren ipsum</summary>' +
@@ -167,4 +170,10 @@ test('It should be possible to load an atom entry to our objects ' +
     author = entry.getAuthors()[0];
     equal(author.getName(), 'Thadeu Lima de Souza Cascardo', 'Author`s name');
     equal(author.getEmail(), null, 'Author`s email addr');
+
+    var categories = entry.getCategories();
+    equals(categories.length, 3, 'Number of categories');
+    equals(categories[0].getTerm(), 'oi', 'Term of the first category');
+    equals(categories[1].getLabel(), 'Blah', 'Label of the second cat');
+    equals(categories[2].getScheme(), 'http://gnu.org', '3rd cat scheme');
 });

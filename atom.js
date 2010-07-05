@@ -268,7 +268,7 @@ atom.Entry.extend({
 
     /* List getters */
     getAuthors: function () { return this.authors; },
-    getCategorys: function () { return this.categories; },
+    getCategories: function () { return this.categories; },
     getLinks: function () { return this.links; },
 
     /* Methods to control lists of sub-elements */
@@ -281,7 +281,7 @@ atom.Entry.extend({
 
     addCategory: function (category) {
         if (category instanceof atom.Category)
-            this.categorys.push(category);
+            this.categories.push(category);
         else
             throw new Error('Waiting for an atom.Category object');
     },
@@ -367,12 +367,9 @@ function doParseEntry (xml) {
     /* The entry object itself! */
     entry = new atom.Entry();
 
-    var childs = doc.getElementsByTagName('*');
+    var childs = doc.documentElement.childNodes;
     for (i = 0; i < childs.length; i++) {
         var child = childs[i];
-        if (!child.firstChild)
-            continue;
-
         switch (child.tagName) {
         case 'id':
             entry.setId(child.firstChild.nodeValue);
@@ -409,6 +406,14 @@ function doParseEntry (xml) {
                 author.setUri(uri.firstChild.nodeValue);
 
             entry.addAuthor(author);
+            break;
+
+        case 'category':
+            var category = new atom.Category();
+            category.setTerm(child.getAttribute('term'));
+            category.setLabel(child.getAttribute('label'));
+            category.setScheme(child.getAttribute('scheme'));
+            entry.addCategory(category);
             break;
         }
     }
