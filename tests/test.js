@@ -183,4 +183,9 @@ test('It should be possible to load an atom entry to our objects ' +
            'Link href attribute');
     equals(links[0].getRel(), 'self', 'Link rel attribute');
     equals(links[0].getTitle(), null, 'No title in this link');
+
+    var content = entry.getContent();
+    equals(content.getType(), 'xhtml', 'The entry contains an xhtml content');
+    ok(content.getContent().indexOf('real soon now') > -1,
+       "Part of the entry's content");
 });

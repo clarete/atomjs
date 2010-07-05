@@ -423,6 +423,17 @@ function doParseEntry (xml) {
             link.setRel(child.getAttribute('rel'))
             entry.addLink(link);
             break;
+
+        case 'content':
+            var content = new atom.Content(child.getAttribute('type'));
+            content.setSrc(child.getAttribute('src'));
+            if (!content.getSrc()) {
+                var container = document.createElement('container');
+                container.appendChild(child.cloneNode(true));
+                content.setContent(container.innerHTML);
+            }
+            entry.setContent(content);
+            break;
         }
     }
 
