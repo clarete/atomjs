@@ -114,6 +114,7 @@ var atom = {
         this.categories = [];
         this.links = [];
         this.summary = null;
+        this.rights = null;
         this.content = null;
     },
 
@@ -267,6 +268,8 @@ atom.Entry.extend({
     setPublished: function (published) { this.published = published; },
     getSummary: function () { return this.summary; },
     setSummary: function (summary) { this.summary = summary; },
+    getRights: function () { return this.rights; },
+    setRights: function (rights) { this.rights = rights; },
     getContent: function () { return this.content; },
     setContent: function (content) { this.content = content; },
 
@@ -326,6 +329,12 @@ atom.Entry.extend({
             var published = document.createElement('published')
             published.appendChild(document.createTextNode(date));
             element.appendChild(published);
+        }
+
+        if (isValidString(this.rights)) {
+            var rights = document.createElement('rights');
+            rights.appendChild(document.createTextNode(this.rights));
+            element.appendChild(rights);
         }
 
         if (isValidString(this.summary)) {
@@ -394,6 +403,10 @@ function doParseEntry (xml) {
 
         case 'summary':
             entry.setSummary(child.firstChild.nodeValue);
+            break;
+
+        case 'rights':
+            entry.setRights(child.firstChild.nodeValue);
             break;
 
         case 'author':

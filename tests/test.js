@@ -140,6 +140,18 @@ test('It should be possible to describe categories with term, label and ' +
            'scheme="http://guake.org"></category>');
 });
 
+test('It should be possible to set a text with the rights ' +
+'of the entry', function () {
+    var entry = new atom.Entry('My Post');
+    entry.setRights('Copyright (c) 2010  Lincoln de Sousa');
+    equals(entry.getRights(), 'Copyright (c) 2010  Lincoln de Sousa',
+          'Rights field value');
+
+    var generated = '<rights>Copyright (c) 2010  Lincoln de Sousa</rights>';
+    ok(entry.toString().indexOf(generated) != -1,
+       'Entry has the rights field');
+});
+
 test('It should be possible to load an atom entry to our objects ' +
 'structure', function () {
     var entry, author;
@@ -206,4 +218,23 @@ test('It should be possible to load an atom entry to our objects ' +
     equals(content.getType(), 'xhtml', 'The entry contains an xhtml content');
     ok(content.getContent().indexOf('real soon now') > -1,
        "Part of the entry's content");
+});
+
+test('atomjs should find the rights element when parsing an entry',
+function () {
+    var xml =
+        '<entry xmlns="http://www.w3.org/2005/Atom">' +
+        '  <id>http://test.com/feed/1.atom</id>' +
+        '  <title>Test entry</title>' +
+        '  <updated>2010-07-11T02:50:50Z</updated>' +
+        '  <summary>Loren ipsum</summary>' +
+        '  <rights>Copyright (c) 2010  Lincoln de Sousa</rights>' +
+        '  <author><name>Lincoln de Sousa</name></author>' +
+        '  <content type="text">' +
+        '    End of the world cup #calabocagalvao' +
+        '  </content>' +
+        '</entry>';
+    var entry = atom.parseEntry(xml);
+    equals(entry.getRights(), 'Copyright (c) 2010  Lincoln de Sousa',
+           'The <rights/> field value')
 });
