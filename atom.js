@@ -49,8 +49,12 @@ BasicElement.prototype = {
 
     toXML: function () {
         var element = this._getElement();
-        for (var i = 0; i < this.extraElements.length; i++)
-            element.appendChild(this.extraElements[i]._getElement());
+        for (var i = 0; i < this.extraElements.length; i++) {
+            var subel = this.extraElements[i];
+            if (subel != null) {
+                element.appendChild(subel._getElement());
+            }
+        }
         return element;
     },
 
@@ -339,7 +343,8 @@ atom.Entry.extend({
             element.appendChild(this.links[i]._getElement());
 
         /* Finally adding the content */
-        element.appendChild(this.content._getElement());
+        if (this.content)
+            element.appendChild(this.content._getElement());
 
         return element;
     }
