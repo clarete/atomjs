@@ -24,6 +24,7 @@ function isValidString(val) {
 /* Setting up a minimal inheritance infra */
 Function.prototype.inherits = function (parent) {
     this.prototype = new parent();
+    this.prototype.parent = parent;
 }
 
 Function.prototype.extend = function (obj) {
@@ -95,23 +96,27 @@ BasicElement.prototype = {
 
 var atom = {
     SimpleElement: function (name, value) {
+        this.parent();
         this.name = name;
         this.value = value;
     },
 
     Link: function (href) {
+        this.parent();
         this.href = href;
         this.title = null;
         this.rel = null;
     },
 
     Content: function (type) {
+        this.parent();
         this.type = type;
         this.src = null;
         this.content = null;
     },
 
     Person: function (name, email, uri) {
+        this.parent();
         this.tagName = 'author';
         this.name = name;
         this.email = email;
@@ -119,12 +124,14 @@ var atom = {
     },
 
     Category: function (term, label, scheme) {
+        this.parent();
         this.term = term;
         this.label = label;
         this.scheme = scheme;
     },
 
     Entry: function (title) {
+        this.parent();
         this.title = title;
         this.id = null;
         this.updated = new Date();
