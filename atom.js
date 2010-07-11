@@ -34,6 +34,7 @@ Function.prototype.extend = function (obj) {
 /* Base element for all Atom elements */
 
 function BasicElement () {
+    this.attrs = [];
     this.extraElements = [];
 }
 
@@ -43,14 +44,31 @@ BasicElement.prototype = {
                         'be overrided;')
     },
 
+    setAttr: function (key, val) {
+        this.attrs.push({key: key, val: val});
+    },
+
+    getAttr: function (key) {
+        for (var i = 0; i < this.attrs.length; i++) {
+            if (this.attrs[i].key == key)
+                return this.attrs[i].val;
+        }
+    },
+
     append: function (element) {
         this.extraElements.push(element);
     },
 
     toXML: function () {
         var element = this._getElement();
-        for (var i = 0; i < this.extraElements.length; i++) {
-            var subel = this.extraElements[i];
+        var i, attr, subel;
+        for (i = 0; i < this.attrs.length; i++) {
+            attr = this.attrs[i];
+            element.setAttribute(attr.key, attr.val);
+        }
+
+        for (i = 0; i < this.extraElements.length; i++) {
+            subel = this.extraElements[i];
             if (subel != null) {
                 element.appendChild(subel._getElement());
             }
