@@ -71,9 +71,7 @@ BasicElement.prototype = {
 
         for (i = 0; i < this.extraElements.length; i++) {
             subel = this.extraElements[i];
-            if (subel != null) {
-                element.appendChild(subel._getElement());
-            }
+            element.appendChild(subel.toXML());
         }
         return element;
     },

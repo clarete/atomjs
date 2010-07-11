@@ -251,13 +251,23 @@ test('it should be possible to set arbitrary attributes in all of its ' +
        'Attr appears when calling toString');
 });
 
-test('it should be possible to add foreign elements in all of its ' +
+test('it should be possible to add foreign elements in all atomjs ' +
 'elements', function () {
+    var entry = new atom.Entry('title');
+    var date = new Date();
     var license = new atom.SimpleElement('license');
     var requires = new atom.SimpleElement('requires');
 
+    /* Testing a simple element tag alone */
     license.addForeign(requires);
     equals(license.toString(), '<license><requires>' +
            '</requires></license>',
            'Generated code has License and require elements');
+
+    /* Time to do these tests with an atom entry */
+    entry.setUpdated(date);
+    entry.addForeign(license);
+    equals(entry.toString(), '<entry><title>title</title><updated>' +
+           date.toISOString() + '</updated><license><requires>' +
+           '</requires></license></entry>');
 });
