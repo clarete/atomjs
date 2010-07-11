@@ -244,7 +244,7 @@ test('it should be possible to set arbitrary attributes in all of its ' +
     var entry = new atom.Entry('Test Post');
     entry.setAttr('xmlns:cc', 'http://creativecommons.org/ns#');
     equals(entry.getAttr('xmlns:cc'), 'http://creativecommons.org/ns#',
-           'The xml:css attr value');
+           'The xml:cc attr value');
 
     var wantedAttr = 'xmlns:cc="http://creativecommons.org/ns#"';
     ok(entry.toString().indexOf(wantedAttr) != -1,
