@@ -53,7 +53,7 @@ test('It should be possible to create simple key/val elements', function () {
 test('It should be possible to extend simple elements', function () {
     var selement = new atom.SimpleElement('k', 'v');
     equals(selement.toString(), '<k>v</k>');
-    selement.append(new atom.SimpleElement('sub', 'subv'));
+    selement.addForeign(new atom.SimpleElement('sub', 'subv'));
     equals(selement.toString(), '<k>v<sub>subv</sub></k>');
 });
 
@@ -249,4 +249,15 @@ test('it should be possible to set arbitrary attributes in all of its ' +
     var wantedAttr = 'xmlns:cc="http://creativecommons.org/ns#"';
     ok(entry.toString().indexOf(wantedAttr) != -1,
        'Attr appears when calling toString');
+});
+
+test('it should be possible to add foreign elements in all of its ' +
+'elements', function () {
+    var license = new atom.SimpleElement('license');
+    var requires = new atom.SimpleElement('requires');
+
+    license.addForeign(requires);
+    equals(license.toString(), '<license><requires>' +
+           '</requires></license>',
+           'Generated code has License and require elements');
 });

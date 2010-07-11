@@ -53,9 +53,10 @@ BasicElement.prototype = {
             if (this.attrs[i].key == key)
                 return this.attrs[i].val;
         }
+        return null;
     },
 
-    append: function (element) {
+    addForeign: function (element) {
         this.extraElements.push(element);
     },
 
@@ -145,8 +146,10 @@ atom.SimpleElement.extend({
     /* Element Creation */
     _getElement: function () {
         var element = document.createElement(this.name);
-        var elementValue = document.createTextNode(this.value);
-        element.appendChild(elementValue);
+        if (this.value) {
+            var elementValue = document.createTextNode(this.value);
+            element.appendChild(elementValue);
+        }
         return element;
     }
 });
