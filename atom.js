@@ -331,6 +331,9 @@ atom.Entry.extend({
         var element = document.createElement('entry');
         var i = 0;
 
+        /* Setting the right namespace in the entry element */
+        element.setAttribute('xmlns', 'http://www.w3.org/2005/Atom');
+
         if (isValidString(this.title)) {
             var title = document.createElement('title')
             title.appendChild(document.createTextNode(this.title));
