@@ -67,16 +67,15 @@ test('Link objects can have href, title and rel attrs', function () {
     }
 
     link.setHref('http://gnome.org');
-
     equal(link.toString(), '<link href="http://gnome.org">');
 
     link.setTitle('Link Title');
-    equal(link.toString(), '<link href="http://gnome.org" ' +
-          'title="Link Title">');
+    ok(link.toString().indexOf('title="Link Title"') != -1,
+       "link has the title attribute equals to Link Title");
 
     link.setRel('alternate');
-    equal(link.toString(), '<link href="http://gnome.org" ' +
-          'title="Link Title" rel="alternate">');
+    ok(link.toString().indexOf('rel="alternate"') != -1,
+       'link has the rel attribute equals to alternate');
 });
 
 test('Content objects should have a type attr defined', function () {
@@ -132,12 +131,12 @@ test('It should be possible to describe categories with term, label and ' +
     equals(cat.toString(), '<category term="myterm"></category>');
 
     cat.setLabel('My Label');
-    equals(cat.toString(), '<category term="myterm" label="My Label">' +
-           '</category>');
+    ok(cat.toString().indexOf('label="My Label"') != -1,
+       'Category has the label attribute set to My Label');
 
     cat.setScheme('http://guake.org');
-    equals(cat.toString(), '<category term="myterm" label="My Label" ' +
-           'scheme="http://guake.org"></category>');
+    ok(cat.toString().indexOf('scheme="http://guake.org"') != -1,
+       'Category element has the scheme set to http://guake.org');
 });
 
 test('It should be possible to set a text with the rights ' +
