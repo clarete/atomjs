@@ -266,7 +266,9 @@ test('it should be possible to add foreign elements in all atomjs ' +
     /* Time to do these tests with an atom entry */
     entry.setUpdated(date);
     entry.addForeign(license);
-    equals(entry.toString(), '<entry><title>title</title><updated>' +
-           date.toISOString() + '</updated><license><requires>' +
+    equals(entry.toString(),
+           '<entry xmlns="http://www.w3.org/2005/Atom">' +
+           '<title>title</title><updated>' + date.toISOString() +
+           '</updated><license><requires>' +
            '</requires></license></entry>');
 });
