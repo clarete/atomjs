@@ -25,12 +25,12 @@ function isValidString(val) {
 Function.prototype.inherits = function (parent) {
     this.prototype = new parent();
     this.prototype.parent = parent;
-}
+};
 
 Function.prototype.extend = function (obj) {
     for (var i in obj)
         this.prototype[i] = obj[i];
-}
+};
 
 /* Base element for all Atom elements */
 
@@ -42,7 +42,7 @@ function BasicElement () {
 BasicElement.prototype = {
     _getElement: function () {
         throw new Error('BasicElement._getElement: This method should ' +
-                        'be overrided;')
+                        'be overrided;');
     },
 
     setAttr: function (key, val) {
@@ -236,19 +236,19 @@ atom.Person.extend({
         if (!isValidString(this.name)) {
             throw new Error("Person._getElement: `name' attr is not set");
         } else {
-            var name = document.createElement('name')
+            var name = document.createElement('name');
             name.appendChild(document.createTextNode(this.name));
             element.appendChild(name);
         }
 
         if (isValidString(this.email)) {
-            var email = document.createElement('email')
+            var email = document.createElement('email');
             email.appendChild(document.createTextNode(this.email));
             element.appendChild(email);
         }
 
         if (isValidString(this.uri)) {
-            var uri = document.createElement('uri')
+            var uri = document.createElement('uri');
             uri.appendChild(document.createTextNode(this.uri));
             element.appendChild(uri);
         }
@@ -330,32 +330,33 @@ atom.Entry.extend({
     _getElement: function () {
         var element = document.createElement('entry');
         var i = 0;
+        var date;
 
         /* Setting the right namespace in the entry element */
         element.setAttribute('xmlns', 'http://www.w3.org/2005/Atom');
 
         if (isValidString(this.title)) {
-            var title = document.createElement('title')
+            var title = document.createElement('title');
             title.appendChild(document.createTextNode(this.title));
             element.appendChild(title);
         }
 
         if (isValidString(this.id)) {
-            var id = document.createElement('id')
+            var id = document.createElement('id');
             id.appendChild(document.createTextNode(this.id));
             element.appendChild(id);
         }
 
         if (this.updated instanceof Date) {
-            var date = this.updated.toISOString();
-            var updated = document.createElement('updated')
+            var updated = document.createElement('updated');
+            date = this.updated.toISOString();
             updated.appendChild(document.createTextNode(date));
             element.appendChild(updated);
         }
 
         if (this.published instanceof Date) {
-            var date = this.published.toISOString();
-            var published = document.createElement('published')
+            var published = document.createElement('published');
+            date = this.published.toISOString();
             published.appendChild(document.createTextNode(date));
             element.appendChild(published);
         }
@@ -367,7 +368,7 @@ atom.Entry.extend({
         }
 
         if (isValidString(this.summary)) {
-            var summary = document.createElement('summary')
+            var summary = document.createElement('summary');
             summary.appendChild(document.createTextNode(this.summary));
             element.appendChild(summary);
         }
@@ -467,7 +468,7 @@ function doParseEntry (xml) {
             var link = new atom.Link();
             link.setHref(child.getAttribute('href'));
             link.setTitle(child.getAttribute('title'));
-            link.setRel(child.getAttribute('rel'))
+            link.setRel(child.getAttribute('rel'));
             entry.addLink(link);
             break;
 
